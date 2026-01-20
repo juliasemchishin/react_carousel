@@ -25,38 +25,18 @@ const Carousel: React.FC<CarouselType> = ({
     initialAnimationDuration,
   );
 
-  // console.log('index', index);
 
   const maxIndex = Math.max(0, images.length - frameSize);
-  // const nextIndex = Math.min(maxIndex, index + step);
-  // const prevIndex = Math.max(0, index - step);
-  // console.log('maxIndex', maxIndex);
-  // console.log('nextIndex', nextIndex);
-  // console.log('prevIndex', prevIndex);
 
   const nextSlide = () => {
-    const nextIndex = Math.min(maxIndex, index + step);
-
     setIndex(prev => {
-      if (maxIndex === nextIndex) {
-        return prev + 1;
-      }
-
-      return prev + step;
+      return Math.min(maxIndex, prev + step);
     });
   };
 
   const prevSlide = () => {
     setIndex(prev => {
-      if (prev === 1) {
-        return prev - 1;
-      }
-
-      if (prev !== 0 && prev - step < 0) {
-        return Math.max(0, prev - step);
-      }
-
-      return prev - step;
+      return Math.max(0, prev - step);
     });
   };
 
