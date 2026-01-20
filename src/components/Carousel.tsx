@@ -12,22 +12,31 @@ interface CarouselType {
 
 const Carousel: React.FC<CarouselType> = ({
   images,
-  step = 3,
-  frameSize = 3,
-  itemWidth = 130,
-  animationDuration = 1000,
+  step: initialStep = 3,
+  frameSize: initialFrameSize = 3,
+  itemWidth: initialItemWidth = 130,
+  animationDuration: initialAnimationDuration = 1000,
 }: CarouselType) => {
   const [index, setIndex] = useState(0);
+  const [step, setStep] = useState(initialStep);
+  const [frameSize, setFrameSize] = useState(initialFrameSize);
+  const [itemWidth, setItemWidth] = useState(initialItemWidth);
+  const [animationDuration, setAnimationDuration] = useState(
+    initialAnimationDuration,
+  );
+
   // console.log('index', index);
 
   const maxIndex = Math.max(0, images.length - frameSize);
-  const nextIndex = Math.min(maxIndex, index + step);
+  // const nextIndex = Math.min(maxIndex, index + step);
   // const prevIndex = Math.max(0, index - step);
   // console.log('maxIndex', maxIndex);
   // console.log('nextIndex', nextIndex);
   // console.log('prevIndex', prevIndex);
 
   const nextSlide = () => {
+    const nextIndex = Math.min(maxIndex, index + step);
+
     setIndex(prev => {
       if (maxIndex === nextIndex) {
         return prev + 1;
@@ -39,8 +48,12 @@ const Carousel: React.FC<CarouselType> = ({
 
   const prevSlide = () => {
     setIndex(prev => {
-      if (index === 1) {
+      if (prev === 1) {
         return prev - 1;
+      }
+
+      if (prev !== 0 && prev - step < 0) {
+        return Math.max(0, prev - step);
       }
 
       return prev - step;
@@ -49,14 +62,44 @@ const Carousel: React.FC<CarouselType> = ({
 
   return (
     <div>
-      <div className="Carousel__inputs">
-        <label htmlFor="itemId">Item width</label>
-        <input type="number" value={itemWidth} id="itemId" />
-        <label htmlFor="frameId">Frame size</label>
-        <input type="number" value={frameSize} id="frameId" />
-        <label htmlFor="stepId">Step</label>
-        <input type="number" value={step} id="stepId" />
-      </div>
+      <form action="" className="Carousel__form">
+        <label htmlFor="itemId">
+          Item width &nbsp;
+          <input
+            type="number"
+            value={itemWidth}
+            id="itemId"
+            onChange={event => setItemWidth(Number(event.target.value))}
+          />
+        </label>
+        <label htmlFor="frameId">
+          Frame size &nbsp;
+          <input
+            type="number"
+            value={frameSize}
+            id="frameId"
+            onChange={event => setFrameSize(Number(event.target.value))}
+          />
+        </label>
+        <label htmlFor="stepId">
+          Step &nbsp;
+          <input
+            type="number"
+            value={step}
+            id="stepId"
+            onChange={event => setStep(Number(event.target.value))}
+          />
+        </label>
+        <label htmlFor="animationId">
+          Animation duration &nbsp;
+          <input
+            type="number"
+            value={animationDuration}
+            id="animationId"
+            onChange={event => setAnimationDuration(Number(event.target.value))}
+          />
+        </label>
+      </form>
 
       <div className="Carousel__wrapper">
         <button
@@ -72,7 +115,10 @@ const Carousel: React.FC<CarouselType> = ({
           />
         </button>
 
-        <div className="Carousel container__list">
+        <div
+          className="Carousel container__list"
+          style={{ width: `${itemWidth * frameSize}px` }}
+        >
           <ul
             className="Carousel__list container__list__wrapper"
             style={{
@@ -87,6 +133,11 @@ const Carousel: React.FC<CarouselType> = ({
                   src={image}
                   alt=""
                   className="image carousel__item"
+                  style={{
+                    minWidth: `${itemWidth}px`,
+                    width: `${itemWidth}px`,
+                    height: `${itemWidth}px`,
+                  }}
                 />
               </li>
             ))}

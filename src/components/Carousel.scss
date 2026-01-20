@@ -1,5 +1,5 @@
 // style go here
-.Carousel__inputs {
+.Carousel__form {
   display: flex;
   gap: 15px;
 }
@@ -10,18 +10,11 @@
 }
 
 .container__list {
-  width: 390px;
   overflow: hidden;
 
   &__wrapper {
     display: flex;
   }
-}
-
-li {
-  min-width: 130px;
-  width: 130px;
-  height: 130px;
 }
 
 .carousel__item {
